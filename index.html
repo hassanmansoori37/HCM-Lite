@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0B3D33">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="HCM Lite">
+  <title>HCM Lite</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/icon-192.svg">
+  <link rel="icon" type="image/svg+xml" href="assets/icon-192.svg">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .auth-page-wrapper {
+      min-height: 100vh;
+      display: flex;
+      background-color: var(--bg);
+    }
+
+    /* Bright, Fresh Pastel Left Hero Panel */
+    .auth-banner-pane {
+      flex: 1.15;
+      background: linear-gradient(135deg, #E8F7F4 0%, #EEF0FF 50%, #FFF6E5 100%);
+      color: var(--text);
+      padding: 3.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      border-right: 1px solid var(--border);
+    }
+
+    /* Decorative soft blurred circles */
+    .auth-banner-pane::before {
+      content: '';
+      position: absolute;
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle, rgba(15, 157, 138, 0.16) 0%, transparent 70%);
+      top: -120px;
+      left: -120px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .auth-banner-pane::after {
+      content: '';
+      position: absolute;
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, rgba(109, 94, 245, 0.14) 0%, transparent 70%);
+      bottom: -140px;
+      right: -140px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .banner-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      z-index: 1;
+    }
+
+    .banner-brand-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px var(--primary-glow);
+    }
+
+    .banner-brand h2 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .banner-content {
+      max-width: 520px;
+      margin: 1.75rem 0;
+      z-index: 1;
+    }
+
+    .hackathon-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: var(--primary-soft);
+      border: 1px solid rgba(15, 157, 138, 0.25);
+      padding: 0.35rem 0.85rem;
+      border-radius: var(--radius-full);
+      font-size: 0.775rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      color: var(--primary-dark);
+    }
+
+    .banner-content h1 {
+      font-size: 2.35rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 0.85rem;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+
+    .banner-content p {
+      font-size: 0.975rem;
+      color: #4B5563;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Vector SVG Illustration Card */
+    .banner-illustration-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(230, 235, 242, 0.9);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 10px 25px -4px rgba(16, 24, 40, 0.06);
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-points {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .feature-point {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.875rem;
+      color: #374151;
+      font-weight: 500;
+    }
+
+    .feature-point i {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: var(--primary-soft);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    .banner-footer {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1;
+    }
+
+    .auth-form-pane {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+      position: relative;
+      background-color: var(--bg);
+    }
+
+    .auth-card-box {
+      width: 100%;
+      max-width: 480px;
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem 2.25rem;
+      box-shadow: var(--shadow-xl);
+      animation: formFadeIn 0.3s ease;
+    }
+
+    @keyframes formFadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .auth-card-header {
+      margin-bottom: 1.75rem;
+    }
+
+    .auth-card-header h2 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.35rem;
+    }
+
+    .auth-card-header p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .wizard-steps-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .step-dot {
+      flex: 1;
+      height: 5px;
+      border-radius: var(--radius-full);
+      background-color: var(--border);
+      transition: var(--transition);
+    }
+
+    .step-dot.active {
+      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+    }
+
+    .reset-app-link {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+
+    .reset-app-link button {
+      color: var(--danger);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    /* Compact header on mobile */
+    .mobile-logo-header {
+      display: none;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1.5rem;
+      justify-content: center;
+    }
+
+    @media (max-width: 900px) {
+      .auth-page-wrapper {
+        flex-direction: column;
+      }
+      .auth-banner-pane {
+        display: none;
+      }
+      .mobile-logo-header {
+        display: flex;
+      }
+      .auth-form-pane {
+        padding: 2.5rem 1rem;
+      }
+      .auth-card-box {
+        padding: 1.75rem 1.25rem;
+        box-shadow: var(--shadow-md);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-page-wrapper">
+    <!-- Brand / Feature Banner (Light, Fresh Pastel) -->
+    <div class="auth-banner-pane">
+      <div class="banner-brand">
+        <div class="banner-brand-icon">
+          <i class="fa-solid fa-users-gear"></i>
+        </div>
+        <div>
+          <h2>HCM Lite</h2>
+          <span style="font-size: 0.725rem; color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">HR & Team Operations</span>
+        </div>
+      </div>
+
+      <div class="banner-content">
+        <div class="hackathon-badge">
+          <i class="fa-solid fa-trophy"></i> Saylani Hackathon 
+        </div>
+        <h1>Streamlined HR for Modern Teams.</h1>
+        <p>Human Capital Management. Dynamic attendance with grace periods, leave tracking with quotas, automated payslips, and an intelligent virtual HR assistant.</p>
+
+        <!-- Fresh Dashboard & People Illustration (SVG) -->
+        <div class="banner-illustration-card">
+          <svg viewBox="0 0 420 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; display: block;">
+            <!-- Mini Dashboard Card Window -->
+            <rect x="5" y="5" width="410" height="110" rx="12" fill="#FFFFFF" stroke="#E6EBF2" stroke-width="1.5" />
+            <!-- Header Bar -->
+            <rect x="5" y="5" width="410" height="28" rx="12" fill="#F8FAFC" />
+            <circle cx="24" cy="19" r="4" fill="#EF4444" />
+            <circle cx="36" cy="19" r="4" fill="#F59E0B" />
+            <circle cx="48" cy="19" r="4" fill="#10B981" />
+            <rect x="68" y="15" width="90" height="8" rx="4" fill="#E2E8F0" />
+
+            <!-- Metric Box 1: Attendance Rate -->
+            <rect x="20" y="45" width="115" height="58" rx="8" fill="#E3F6F3" stroke="rgba(15, 157, 138, 0.25)" />
+            <circle cx="40" cy="62" r="10" fill="#0F9D8A" />
+            <path d="M37 62L39 64L43 59" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <rect x="56" y="56" width="65" height="6" rx="3" fill="#0F9D8A" />
+            <text x="56" y="88" font-family="'Plus Jakarta Sans', sans-serif" font-size="16" font-weight="800" fill="#0F172A">98.4%</text>
+
+            <!-- Metric Box 2: Bar Chart -->
+            <rect x="145" y="45" width="140" height="58" rx="8" fill="#FFFFFF" stroke="#E6EBF2" />
+            <rect x="160" y="75" width="12" height="20" rx="3" fill="#6D5EF5" />
+            <rect x="180" y="62" width="12" height="33" rx="3" fill="#0F9D8A" />
+            <rect x="200" y="70" width="12" height="25" rx="3" fill="#0F9D8A" />
+            <rect x="220" y="55" width="12" height="40" rx="3" fill="#6D5EF5" />
+            <rect x="240" y="68" width="12" height="27" rx="3" fill="#F59E0B" />
+            <rect x="260" y="58" width="12" height="37" rx="3" fill="#0F9D8A" />
+
+            <!-- Metric Box 3: Avatars Stack -->
+            <rect x="295" y="45" width="105" height="58" rx="8" fill="#EEEBFF" stroke="rgba(109, 94, 245, 0.2)" />
+            <circle cx="320" cy="74" r="14" fill="#6D5EF5" />
+            <text x="314" y="78" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="white">AL</text>
+            <circle cx="342" cy="74" r="14" fill="#0F9D8A" stroke="white" stroke-width="2" />
+            <text x="336" y="78" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="white">ML</text>
+            <circle cx="364" cy="74" r="14" fill="#F59E0B" stroke="white" stroke-width="2" />
+            <text x="359" y="78" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="white">SC</text>
+            <text x="312" y="57" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="700" fill="#5B4FCF">TEAM ACTIVE</text>
+          </svg>
+        </div>
+
+        <div class="feature-points">
+          <div class="feature-point">
+            <i class="fa-solid fa-check"></i>
+            <span>Zero dummy data — Starts completely clean with real user records</span>
+          </div>
+          <div class="feature-point">
+            <i class="fa-solid fa-check"></i>
+            <span>Policy-driven attendance (grace minutes, late penalties & half-days)</span>
+          </div>
+          <div class="feature-point">
+            <i class="fa-solid fa-check"></i>
+            <span>Automated salary deductions and printable payslips</span>
+          </div>
+          <div class="feature-point">
+            <i class="fa-solid fa-check"></i>
+            <span>Role-guarded Smart Assistant with strict privacy separation</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="banner-footer">
+        <span>&copy; 2026 HCM Lite. Client-side local storage engine.</span>
+        <button type="button" class="btn-theme-toggle" title="Toggle Theme" aria-label="Toggle Theme">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Auth / Wizard Pane -->
+    <div class="auth-form-pane">
+      <div class="mobile-logo-header">
+        <div class="banner-brand-icon" style="width: 36px; height: 36px; font-size: 1.1rem;">
+          <i class="fa-solid fa-users-gear"></i>
+        </div>
+        <div style="font-weight: 800; font-size: 1.25rem; color: var(--text);">HCM Lite</div>
+      </div>
+
+      <!-- VIEW A: FIRST-RUN SETUP WIZARD (Displayed if no company exists) -->
+      <div id="view-setup-wizard" class="auth-card-box" style="display: none;">
+        <div class="auth-card-header">
+          <div class="wizard-steps-indicator">
+            <div class="step-dot active" id="dot-step-1"></div>
+            <div class="step-dot" id="dot-step-2"></div>
+          </div>
+          <h2 id="wizard-title">Initial Setup Wizard</h2>
+          <p id="wizard-subtitle">Welcome! Configure your company and super-admin credentials to get started.</p>
+        </div>
+
+        <form id="setup-form" novalidate>
+          <!-- STEP 1: COMPANY & ADMIN INFO -->
+          <div id="setup-step-1">
+            <div class="form-group">
+              <label class="form-label" for="setup-company-name">
+                Company / Organization Name <span class="required">*</span>
+              </label>
+              <div class="input-with-icon">
+                <i class="fa-solid fa-building prefix-icon"></i>
+                <input type="text" id="setup-company-name" class="form-control" placeholder="e.g. Acme Innovations Ltd." required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="setup-admin-name">
+                Super Admin Full Name <span class="required">*</span>
+              </label>
+              <div class="input-with-icon">
+                <i class="fa-solid fa-user prefix-icon"></i>
+                <input type="text" id="setup-admin-name" class="form-control" placeholder="e.g. Sarah Jenkins" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="setup-admin-email">
+                Admin Email Address <span class="required">*</span>
+              </label>
+              <div class="input-with-icon">
+                <i class="fa-solid fa-envelope prefix-icon"></i>
+                <input type="email" id="setup-admin-email" class="form-control" placeholder="admin@example.com" required>
+              </div>
+            </div>
+
+            <div class="grid-cols-2" style="gap: 0.75rem;">
+              <div class="form-group">
+                <label class="form-label" for="setup-admin-password">
+                  Password <span class="required">*</span>
+                </label>
+                <div class="input-with-icon">
+                  <i class="fa-solid fa-lock prefix-icon"></i>
+                  <input type="password" id="setup-admin-password" class="form-control" placeholder="Min 6 chars" required>
+                  <button type="button" class="suffix-btn toggle-password" data-target="setup-admin-password" aria-label="Show password">
+                    <i class="fa-solid fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="setup-admin-confirm-password">
+                  Confirm Password <span class="required">*</span>
+                </label>
+                <div class="input-with-icon">
+                  <i class="fa-solid fa-shield-halved prefix-icon"></i>
+                  <input type="password" id="setup-admin-confirm-password" class="form-control" placeholder="Repeat password" required>
+                </div>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary btn-lg" id="btn-next-step" style="width: 100%; margin-top: 1rem;">
+              <span>Continue to Policies</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <!-- STEP 2: POLICIES (START TIME, GRACE, LEAVE QUOTA, WORKING DAYS) -->
+          <div id="setup-step-2" style="display: none;">
+            <div class="grid-cols-2" style="gap: 0.75rem;">
+              <div class="form-group">
+                <label class="form-label" for="setup-start-time">
+                  Office Start Time <span class="required">*</span>
+                </label>
+                <input type="time" id="setup-start-time" class="form-control" value="09:00" required>
+                <span class="form-hint">Standard daily opening</span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="setup-grace-minutes">
+                  Grace Period (Mins) <span class="required">*</span>
+                </label>
+                <input type="number" id="setup-grace-minutes" class="form-control" value="15" min="0" max="120" required>
+                <span class="form-hint">Check-in past this is Late</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="setup-leave-quota">
+                Annual Leave Quota (Days) <span class="required">*</span>
+              </label>
+              <input type="number" id="setup-leave-quota" class="form-control" value="12" min="1" max="60" required>
+              <span class="form-hint">Total allowed paid leaves per employee per year</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                Company Working Days <span class="required">*</span>
+              </label>
+              <div class="working-days-grid" id="setup-working-days">
+                <div class="day-chip-checkbox">
+                  <input type="checkbox" id="wday-1" value="1" checked>
+                  <label class="day-chip-label" for="wday-1">Mon</label>
+                </div>
+                <div class="day-chip-checkbox">
+                  <input type="checkbox" id="wday-2" value="2" checked>
+                  <label class="day-chip-label" for="wday-2">Tue</label>
+                </div>
+                <div class="day-chip-checkbox">
+                  <input type="checkbox" id="wday-3" value="3" checked>
+                  <label class="day-chip-label" for="wday-3">Wed</label>
+                </div>
+                <div class="day-chip-checkbox">
+                  <input type="checkbox" id="wday-4" value="4" checked>
+                  <label class="day-chip-label" for="wday-4">Thu</label>
+                </div>
+                <div class="day-chip-checkbox">
+                  <input type="checkbox" id="wday-5" value="5" checked>
+                  <label class="day-chip-label" for="wday-5">Fri</label>
+                </div>
+                <div class="day-chip-checkbox">
+                  <input type="checkbox" id="wday-6" value="6">
+                  <label class="day-chip-label" for="wday-6">Sat</label>
+                </div>
+                <div class="day-chip-checkbox">
+                  <input type="checkbox" id="wday-0" value="0">
+                  <label class="day-chip-label" for="wday-0">Sun</label>
+                </div>
+              </div>
+              <div class="form-error" id="working-days-error">Please select at least one working day.</div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+              <button type="button" class="btn btn-outline" id="btn-prev-step" style="flex: 1;">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Back</span>
+              </button>
+              <button type="submit" class="btn btn-primary" id="btn-finish-setup" style="flex: 2;">
+                <i class="fa-solid fa-rocket"></i>
+                <span>Launch HCM Lite</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- VIEW B: LOGIN FORM (Displayed when company already initialized) -->
+      <div id="view-login" class="auth-card-box" style="display: none;">
+        <div class="auth-card-header">
+          <h2 id="login-company-display">Welcome Back</h2>
+          <p>Please enter your credentials to access your workspace portal.</p>
+        </div>
+
+        <form id="login-form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="login-email">
+              Email Address <span class="required">*</span>
+            </label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-envelope prefix-icon"></i>
+              <input type="email" id="login-email" class="form-control" placeholder="name@company.com" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-password">
+              Password <span class="required">*</span>
+            </label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-lock prefix-icon"></i>
+              <input type="password" id="login-password" class="form-control" placeholder="Your password" required autocomplete="current-password">
+              <button type="button" class="suffix-btn toggle-password" data-target="login-password" aria-label="Show password">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" id="btn-login-submit" style="width: 100%; margin-top: 1.25rem;">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>Sign In to Dashboard</span>
+          </button>
+        </form>
+
+        <div class="reset-app-link">
+          <span>Need to start from scratch?</span>
+          <button type="button" id="btn-reset-demo">Reset All Data & First-Run</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/storage.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // Document Initialization
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Check Route Guard
+      if (!Auth.requireAuth('public')) return;
+
+      const company = Storage.getCompany();
+      const viewSetup = document.getElementById('view-setup-wizard');
+      const viewLogin = document.getElementById('view-login');
+
+      // Toggle show/hide password buttons
+      document.querySelectorAll('.toggle-password').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetId = btn.getAttribute('data-target');
+          const targetInput = document.getElementById(targetId);
+          if (targetInput) {
+            const isPassword = targetInput.type === 'password';
+            targetInput.type = isPassword ? 'text' : 'password';
+            btn.innerHTML = isPassword ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
+          }
+        });
+      });
+
+      // Reset all data button
+      const resetBtn = document.getElementById('btn-reset-demo');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          UI.showConfirmDialog({
+            title: 'Reset HCM Lite?',
+            message: 'This will completely erase all localStorage data and re-open the initial setup wizard. Are you sure?',
+            confirmText: 'Yes, Reset Everything',
+            confirmClass: 'btn-danger',
+            onConfirm: () => {
+              localStorage.clear();
+              UI.showToast('Workspace reset successfully! Reloading...', 'success');
+              setTimeout(() => window.location.reload(), 600);
+            }
+          });
+        });
+      }
+
+      // Check whether to show setup wizard or login form
+      if (!company) {
+        initSetupWizard();
+      } else {
+        initLoginForm(company);
+      }
+    });
+
+    /**
+     * Initialize First-Run Setup Wizard logic
+     */
+    function initSetupWizard() {
+      const viewSetup = document.getElementById('view-setup-wizard');
+      viewSetup.style.display = 'block';
+
+      const step1 = document.getElementById('setup-step-1');
+      const step2 = document.getElementById('setup-step-2');
+      const dot1 = document.getElementById('dot-step-1');
+      const dot2 = document.getElementById('dot-step-2');
+      const wizardTitle = document.getElementById('wizard-title');
+      const wizardSubtitle = document.getElementById('wizard-subtitle');
+
+      const btnNext = document.getElementById('btn-next-step');
+      const btnPrev = document.getElementById('btn-prev-step');
+      const setupForm = document.getElementById('setup-form');
+
+      // Step 1 -> Step 2 validation
+      btnNext.addEventListener('click', () => {
+        UI.clearAllFieldErrors(step1);
+        let isValid = true;
+
+        const companyName = document.getElementById('setup-company-name');
+        const adminName = document.getElementById('setup-admin-name');
+        const adminEmail = document.getElementById('setup-admin-email');
+        const adminPassword = document.getElementById('setup-admin-password');
+        const adminConfirm = document.getElementById('setup-admin-confirm-password');
+
+        if (!companyName.value.trim()) {
+          UI.setFieldError(companyName, 'Company name is required.');
+          isValid = false;
+        }
+
+        if (!adminName.value.trim()) {
+          UI.setFieldError(adminName, 'Admin full name is required.');
+          isValid = false;
+        }
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!adminEmail.value.trim()) {
+          UI.setFieldError(adminEmail, 'Admin email is required.');
+          isValid = false;
+        } else if (!emailPattern.test(adminEmail.value.trim())) {
+          UI.setFieldError(adminEmail, 'Please enter a valid email address.');
+          isValid = false;
+        }
+
+        if (!adminPassword.value) {
+          UI.setFieldError(adminPassword, 'Password is required.');
+          isValid = false;
+        } else if (adminPassword.value.length < 6) {
+          UI.setFieldError(adminPassword, 'Password must be at least 6 characters.');
+          isValid = false;
+        }
+
+        if (adminPassword.value !== adminConfirm.value) {
+          UI.setFieldError(adminConfirm, 'Passwords do not match.');
+          isValid = false;
+        }
+
+        if (!isValid) return;
+
+        // Switch to step 2
+        step1.style.display = 'none';
+        step2.style.display = 'block';
+        dot1.classList.remove('active');
+        dot2.classList.add('active');
+        wizardTitle.textContent = 'Company Policies';
+        wizardSubtitle.textContent = 'Define core attendance hours, grace minutes, and leave quotas.';
+      });
+
+      // Step 2 -> Step 1 back
+      btnPrev.addEventListener('click', () => {
+        step2.style.display = 'none';
+        step1.style.display = 'block';
+        dot2.classList.remove('active');
+        dot1.classList.add('active');
+        wizardTitle.textContent = 'Initial Setup Wizard';
+        wizardSubtitle.textContent = 'Configure your company and super-admin credentials to get started.';
+      });
+
+      // Submit setup form
+      setupForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        UI.clearAllFieldErrors(step2);
+
+        const startTime = document.getElementById('setup-start-time');
+        const graceMinutes = document.getElementById('setup-grace-minutes');
+        const leaveQuota = document.getElementById('setup-leave-quota');
+
+        let isValid = true;
+
+        if (!startTime.value) {
+          UI.setFieldError(startTime, 'Office start time is required.');
+          isValid = false;
+        }
+
+        if (graceMinutes.value === '' || parseInt(graceMinutes.value, 10) < 0) {
+          UI.setFieldError(graceMinutes, 'Grace minutes must be 0 or greater.');
+          isValid = false;
+        }
+
+        if (!leaveQuota.value || parseInt(leaveQuota.value, 10) < 1) {
+          UI.setFieldError(leaveQuota, 'Leave quota must be at least 1 day.');
+          isValid = false;
+        }
+
+        // Get checked working days
+        const checkedDays = Array.from(document.querySelectorAll('#setup-working-days input[type="checkbox"]:checked'))
+          .map(cb => parseInt(cb.value, 10));
+
+        const workingDaysError = document.getElementById('working-days-error');
+        if (checkedDays.length === 0) {
+          workingDaysError.classList.add('visible');
+          isValid = false;
+        } else {
+          workingDaysError.classList.remove('visible');
+        }
+
+        if (!isValid) return;
+
+        // Complete setup
+        const companyName = document.getElementById('setup-company-name').value.trim();
+        const adminName = document.getElementById('setup-admin-name').value.trim();
+        const adminEmail = document.getElementById('setup-admin-email').value.trim();
+        const adminPassword = document.getElementById('setup-admin-password').value;
+
+        const result = Auth.setupCompanyAndAdmin({
+          companyName,
+          startTime: startTime.value,
+          graceMinutes: parseInt(graceMinutes.value, 10),
+          leaveQuota: parseInt(leaveQuota.value, 10),
+          workingDays: checkedDays,
+          adminName,
+          adminEmail,
+          adminPassword
+        });
+
+        if (result.success) {
+          UI.showToast(`Welcome to HCM Lite, ${adminName}! Setting up workspace...`, 'success', 'Setup Complete');
+          setTimeout(() => {
+            window.location.replace('pages/admin.html');
+          }, 800);
+        }
+      });
+    }
+
+    /**
+     * Initialize Login Form logic
+     */
+    function initLoginForm(company) {
+      const viewLogin = document.getElementById('view-login');
+      viewLogin.style.display = 'block';
+
+      const companyDisplay = document.getElementById('login-company-display');
+      companyDisplay.textContent = company.name || 'Sign In';
+
+      const loginForm = document.getElementById('login-form');
+      const emailInput = document.getElementById('login-email');
+      const passwordInput = document.getElementById('login-password');
+
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        UI.clearAllFieldErrors(loginForm);
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+
+        let hasError = false;
+        if (!email) {
+          UI.setFieldError(emailInput, 'Email address is required.');
+          hasError = true;
+        }
+        if (!password) {
+          UI.setFieldError(passwordInput, 'Password is required.');
+          hasError = true;
+        }
+
+        if (hasError) return;
+
+        const result = Auth.login(email, password);
+        if (!result.success) {
+          if (result.message.includes('No account')) {
+            UI.setFieldError(emailInput, result.message);
+          } else {
+            UI.setFieldError(passwordInput, result.message);
+          }
+          UI.showToast(result.message, 'error', 'Authentication Failed');
+          return;
+        }
+
+        // Login successful
+        UI.showToast(`Welcome back, ${result.user.name}!`, 'success', 'Signed In');
+        const targetPage = result.user.role === 'admin' ? 'pages/admin.html' : 'pages/employee.html';
+        setTimeout(() => {
+          window.location.replace(targetPage);
+        }, 500);
+      });
+    }
+  </script>
+</body>
+</html>
